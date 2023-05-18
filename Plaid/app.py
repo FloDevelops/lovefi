@@ -18,20 +18,23 @@ load_dotenv()
 PLAID_ENV = getenv('PLAID_ENV')
 if PLAID_ENV == 'sandbox':
     host = plaid.Environment.Sandbox
+    PLAID_SECRET=getenv('PLAID_SECRET_SANDBOX')
 
 if PLAID_ENV == 'development':
     host = plaid.Environment.Development
+    PLAID_SECRET=getenv('PLAID_SECRET_DEVELOPMENT')
 
 if PLAID_ENV == 'production':
     host = plaid.Environment.Production
+    PLAID_SECRET=getenv('PLAID_SECRET_PRODUCTION')
 
 PLAID_CLIENT_ID=getenv('PLAID_CLIENT_ID')
-PLAID_SECRET=getenv('PLAID_SECRET_SANDBOX')
 PLAID_PRODUCTS = getenv('PLAID_PRODUCTS')
 PLAID_COUNTRY_CODES = getenv('PLAID_COUNTRY_CODES')
 PLAID_REDIRECT_URI=None
 
 app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 
 configuration = plaid.Configuration(
@@ -55,7 +58,6 @@ access_token = None
 item_id = None
 
 
-
 @app.get("/")
 def hello():
     return  render_template('index.html')
@@ -68,7 +70,7 @@ def create_link_token():
             products=[Products('transactions')],
             client_name="Plaid Quickstart",
             # country_codes=list(map(lambda x: CountryCode(x), PLAID_COUNTRY_CODES)),
-            country_codes=[CountryCode('US')],
+            country_codes=[CountryCode('CA')],
             language='en',
             user=LinkTokenCreateRequestUser(
                 client_user_id=str(time.time())
@@ -76,26 +78,35 @@ def create_link_token():
         )
         if PLAID_REDIRECT_URI!=None:
             request['redirect_uri']=PLAID_REDIRECT_URI
-    # create link token
+
+        # create link token
         response = client.link_token_create(request)
         return jsonify(response.to_dict())
     except plaid.ApiException as e:
         return json.loads(e.body)
     
 
-@app.post('/api/set-access-token')
-def set_access_token():
+@app.post('/api/get-access-token')
+def get_access_token():
     global access_token
     global item_id
     global transfer_id
     data = request.get_json()
-    public_token = data['link_token']
+    public_token = data['public_token']
+    print('public_token:', public_token)
     try:
         exchange_request = ItemPublicTokenExchangeRequest(
-            public_token=public_token)
+            public_token=public_token
+        )
         exchange_response = client.item_public_token_exchange(exchange_request)
         access_token = exchange_response['access_token']
+        print('access_token:', access_token)
         item_id = exchange_response['item_id']
+        print('item_id:', item_id)
+        print('exchange_response:', exchange_response.to_dict())
         return jsonify(exchange_response.to_dict())
     except plaid.ApiException as e:
         return json.loads(e.body)
+    
+if __name__ == '__main__':
+    app.run(port=8000)
