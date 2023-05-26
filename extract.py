@@ -49,7 +49,7 @@ ITEM_ID = getenv('ITEM_ID')
 request = TransactionsGetRequest(
     access_token=ACCESS_TOKEN,
     start_date=datetime.date(2023, 1, 1),
-    end_date=datetime.date(2023, 5, 17),
+    end_date=datetime.date.today(),
     options=TransactionsGetRequestOptions()
 )
 response = client.transactions_get(request)

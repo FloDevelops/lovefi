@@ -1,1 +1,0 @@
-venv/bin/python3 extract.py > logs/extract.json 2>&1
