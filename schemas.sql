@@ -6,6 +6,8 @@
 CREATE TABLE `users` (
 	`id` varchar(255) NOT NULL PRIMARY KEY, -- id of the user from lovefi app, UNIQUE
 	`name` varchar(255) NOT NULL, -- name of the user from lovefi app
+    `email` varchar(255) NOT NULL, -- email adress of the user from lovefi app
+    `phone` varchar(20), -- phone number of the user from lovefi app
     `_last_updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -38,7 +40,7 @@ CREATE TABLE `accounts` (
     `_last_updated_at` timestamp DEFAULT CURRENT_TIMESTAMP
 );
 
--- transactions from plaid with additionnal parameter from lovefi app
+-- transactions from Plaid with additionnal parameter from lovefi app
 -- id + account_id is UNIQUE
 CREATE TABLE `transactions`(
     `id` varchar(255) NOT NULL PRIMARY KEY, -- id of the transaction from plaid
@@ -61,6 +63,23 @@ CREATE TABLE `transactions`(
     `type` varchar(255), -- type of transaction from lovefi app
     `split_categories` json, -- categories and amounts of the transaction as key-value pairs from lovefi app
     `split_people` json, -- users and amounts of the transaction as key-value-pairs from lovefi app
-    `tags` as varchar(255), -- tags associatied with the transaction for advanced filtering such as 'WAITING FOR REFUND' or 'TO INVESTIGATE' from lovefi app
+    `tags` json, -- array of tags associatied with the transaction for advanced filtering such as 'WAITING FOR REFUND' or 'TO INVESTIGATE' from lovefi app
     `_last_updated_at` timestamp DEFAULT CURRENT_TIMESTAMP
 );
+
+-- categories of transactions from lovefi app
+-- type + category + subcategory is UNIQUE
+CREATE TABLE `categories`{
+    `type` varchar(255), -- type of transactions from lovefi app
+    `category` varchar(255), -- categories of transactions within transaction types
+    `subcategory` varchar(255), -- subcategoriees of transactions within transaction category
+    `user_id` varchar(255) NOT NULL REFERENCES users(id) -- id of the user from lovefi app
+};
+
+-- tags of transactions from lovefi app
+-- tag + user is UNIQUE
+CREATE TABLE `tags`{
+    `id` int(50) NOT NULL PRIMARY KEY, -- id of the tag from lovefi app
+    `name` varchar(255) NOT NULL, -- name of the tag from lovefi app
+    `user_id` varchar(255) NOT NULL REFERENCES users(id) -- id of the user from lovefi app
+};
