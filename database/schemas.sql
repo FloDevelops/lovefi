@@ -42,7 +42,7 @@ CREATE TABLE `accounts` (
 
 -- transactions from Plaid with additionnal parameter from lovefi app
 -- id + account_id is UNIQUE
-CREATE TABLE `transactions`(
+CREATE TABLE `transactions` (
     `id` varchar(255) NOT NULL PRIMARY KEY, -- id of the transaction from plaid
     `user_id` varchar(255) NOT NULL REFERENCES users(id), -- id of the user from lovefi app
     `item_id` varchar(255) NOT NULL REFERENCES item_connections(id), -- id of the item from Plaid
@@ -69,17 +69,17 @@ CREATE TABLE `transactions`(
 
 -- categories of transactions from lovefi app
 -- type + category + subcategory is UNIQUE
-CREATE TABLE `categories`{
+CREATE TABLE `categories` (
     `type` varchar(255), -- type of transactions from lovefi app
     `category` varchar(255), -- categories of transactions within transaction types
     `subcategory` varchar(255), -- subcategoriees of transactions within transaction category
     `user_id` varchar(255) NOT NULL REFERENCES users(id) -- id of the user from lovefi app
-};
+);
 
 -- tags of transactions from lovefi app
 -- tag + user is UNIQUE
-CREATE TABLE `tags`{
+CREATE TABLE `tags` (
     `id` int(50) NOT NULL PRIMARY KEY, -- id of the tag from lovefi app
     `name` varchar(255) NOT NULL, -- name of the tag from lovefi app
     `user_id` varchar(255) NOT NULL REFERENCES users(id) -- id of the user from lovefi app
-};
+);
