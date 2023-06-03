@@ -32,6 +32,7 @@ PLAID_CLIENT_ID=getenv('PLAID_CLIENT_ID')
 PLAID_PRODUCTS = getenv('PLAID_PRODUCTS')
 PLAID_COUNTRY_CODES = getenv('PLAID_COUNTRY_CODES')
 PLAID_REDIRECT_URI=None
+PLAID_WEBHOOK_URI=getenv('PLAID_WEBHOOK_URI') # !!!!!!!!!!!!!!!!! TO SPRECIFY !!!!!!!!!!!!!!!!!!!!!!!
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
@@ -68,10 +69,11 @@ def create_link_token():
         request = LinkTokenCreateRequest(
             # products=products,
             products=[Products('transactions')],
-            client_name="Plaid Quickstart",
+            client_name="LoveFi App",
             # country_codes=list(map(lambda x: CountryCode(x), PLAID_COUNTRY_CODES)),
             country_codes=[CountryCode('CA')],
             language='en',
+            webhook=PLAID_WEBHOOK_URI,
             user=LinkTokenCreateRequestUser(
                 client_user_id=str(time.time())
             )
