@@ -6,12 +6,25 @@ import datetime
 from dotenv import load_dotenv
 # from flask import Flask, jsonify, render_template, request
 
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
 import plaid
 from plaid.api import plaid_api
-from plaid.model.transactions_get_request import TransactionsGetRequest
-from plaid.model.transactions_get_request_options import TransactionsGetRequestOptions
+from plaid.model.transactions_sync_request import TransactionsSyncRequest
+from plaid.model.transactions_sync_request_options import TransactionsSyncRequestOptions
+# from plaid.model.transactions_get_request import TransactionsGetRequest
+# from plaid.model.transactions_get_request_options import TransactionsGetRequestOptions
 
 load_dotenv()
+
+# Initialize Firebase
+cred = credentials.Certificate('secrets/sa.json')
+app = firebase_admin.initialize_app(cred)
+db = firestore.client()
+
+
 PLAID_ENV = getenv('PLAID_ENV')
 if PLAID_ENV == 'sandbox':
     host = plaid.Environment.Sandbox
@@ -46,31 +59,58 @@ client = plaid_api.PlaidApi(api_client)
 ACCESS_TOKEN = getenv('ACCESS_TOKEN')
 ITEM_ID = getenv('ITEM_ID')
 
-request = TransactionsGetRequest(
-    access_token=ACCESS_TOKEN,
-    start_date=datetime.date(2023, 1, 1),
-    end_date=datetime.date.today(),
-    options=TransactionsGetRequestOptions()
+user = db.collection('users').document('flo').get().to_dict()
+try:
+    cursor = user['items'][0]['last_sync']['cursor']
+except:
+    cursor = None # Keep track of current cursor
+
+added = []
+modified = []
+removed = [] # Removed transaction ids
+has_more = True
+options = TransactionsSyncRequestOptions(
+    include_personal_finance_category = True
 )
-response = client.transactions_get(request)
-# transactions = response['transactions']
+# Iterate through each page of new transaction updates for item
+while has_more:
+    if cursor:
+        request = TransactionsSyncRequest(
+        access_token=ACCESS_TOKEN,
+        cursor= cursor,
+        count=500,
+        options=options,
+        )
+    else:
+        request = TransactionsSyncRequest(
+        access_token=ACCESS_TOKEN,
+        count=500,
+        options=options,
+        )
 
-# print(json.dumps(response.to_dict(), indent=2, sort_keys=True, default=str))
+    response = client.transactions_sync(request).to_dict()
+    # Add this page of results
+    added.extend(response['added'])
+    modified.extend(response['modified'])
+    removed.extend(response['removed'])
+    has_more = response['has_more']
+    # Update cursor to the next cursor
+    cursor = response['next_cursor']
 
-# Manipulate the count and offset parameters to paginate
-# transactions and retrieve all available data
-# while len(transactions) < response['total_transactions']:
-#     request = TransactionsGetRequest(
-#         access_token=ACCESS_TOKEN,
-#         start_date=datetime.date(2023, 5, 1),
-#         end_date=datetime.date(2023, 5, 17),
-#         options=TransactionsGetRequestOptions(
-#         offset=len(transactions)
-#         )
-# )
-# response = client.transactions_get(request)
-# transactions.extend(response['transactions'])
-
+# Print out the transactions
+results = dict(
+    cursor = cursor,
+    added = added,
+    modified = modified,
+    removed = removed,
+    has_more = has_more,
+    datetime = datetime.datetime.now()
+)
 with open('logs/transactions.json', 'w') as f:
-    f.write(json.dumps(response.to_dict(), indent=2, sort_keys=True, default=str))
+    f.write(json.dumps(
+        results, 
+        indent=2, 
+        sort_keys=True, 
+        default=str
+    ))
 
