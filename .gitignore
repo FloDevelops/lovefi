@@ -9,11 +9,11 @@ dist
 node_modules
 
 # Logs
-_logs
+logs
 *.log
 
 # Secrets
-_secrets
+secrets
 
 # Misc
 .DS_Store
@@ -24,6 +24,7 @@ _secrets
 .env
 .env.*
 !.env.example
+venv
 
 # Old python stuff
 _static
