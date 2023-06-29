@@ -1,5 +1,30 @@
-.env
-venv/
-logs/
+# Nuxt dev/build outputs
+.output
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+_logs
+*.log
+
+# Secrets
+_secrets
+
+# Misc
 .DS_Store
-secrets/
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Old python stuff
+_static
+_templates

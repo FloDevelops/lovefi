@@ -1,19 +1,63 @@
-# MY PERSONAL FINANCES
+# Nuxt 3 Minimal Starter
 
-THIS IS A PERSONNAL PROJECT UNDER DEVELOPMENT...
-## HOW TO
+Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-### FETCH LATEST TRANSACTIONS FOR ME
+## Setup
 
-Run extract.py (uses the environment variables in .env to connect to plaid and fetch a specific connection / access token).
+Make sure to install the dependencies:
 
-### RENEW ACCESS TOKEN
+```bash
+# npm
+npm install
 
-View Plaid documentation for more information (previous tokens savd under logs/token.json).
+# pnpm
+pnpm install
 
+# yarn
+yarn install
+```
 
-## DEFINITIONS
+## Development Server
 
-- link_token: to start a user bank identification, generate a token specific to the user_id from my server and send frontend.
-- public_token: when a user finishes the bank authentification, he receives a public_token frontend.
-- access_token: when passed backend, the public_token is exchanged for an access_token and an item_id.
+Start the development server on `http://localhost:3000`:
+
+```bash
+# npm
+npm run dev
+
+# pnpm
+pnpm run dev
+
+# yarn
+yarn dev
+```
+
+## Production
+
+Build the application for production:
+
+```bash
+# npm
+npm run build
+
+# pnpm
+pnpm run build
+
+# yarn
+yarn build
+```
+
+Locally preview production build:
+
+```bash
+# npm
+npm run preview
+
+# pnpm
+pnpm run preview
+
+# yarn
+yarn preview
+```
+
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
