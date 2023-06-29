@@ -1,43 +1,20 @@
 import json
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
 
-cred = credentials.Certificate('secrets/sa.json')
-
-app = firebase_admin.initialize_app(cred)
-db = firestore.client()
+earliest = None
+biggest = None
 
 with open('logs/transactions.json', 'r') as f:
-    transactions = json.loads(f.read())
-    added = transactions['added']
-    modified = transactions['modified']
-    removed = transactions['removed']
-    datetime = transactions['datetime']
-    cursor = transactions['cursor']
+    transactions = json.loads(f.read())['added']
+    print(f'Found {len(transactions)} transactions')
 
-for transaction in added:
-    transaction_id = transaction['transaction_id']
-    db.collection('transactions').document(transaction_id).set(transaction)
+for transaction in transactions:
+    transaction_date = transaction['date']
+    transaction_amount = transaction['amount']
+    if earliest is None or transaction_date < earliest:
+        earliest = transaction_date
 
-for transaction in modified:
-    transaction_id = transaction['transaction_id']
-    db.collection('transactions').document(transaction_id).update(transaction)
+    if biggest is None or transaction_amount > biggest:
+        biggest = transaction_amount
 
-for transaction_id in removed:
-    db.collection('transactions').document(transaction_id).update({
-        'removed': datetime
-    })
-
-db.collection('users').document('flo').update({
-    'items': [
-        {
-            'id': 'j5qaENDdJMIpdP3XLLp1fg4JPyQALMuRnRAD6',
-            'institution': 'Desjardins',
-            'last_sync': {
-                'datetime': datetime,
-                'cursor': cursor
-            }
-        }
-    ]
-})
+print(f'Earliest transaction: {earliest}')
+print(f'Biggest transaction: $ {biggest:,.2f}')
