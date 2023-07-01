@@ -57,102 +57,109 @@ ITEM_ID = getenv('ITEM_ID')
 
 # Function to get the current cursor
 def get_cursor():
-  user = db.collection('users').document('flo').get().to_dict()
+    user = db.collection('users').document('flo').get().to_dict()
 
-  try:
-    cursor = user['items'][0]['last_sync']['cursor']
-  except:
-    cursor = None
+    try:
+        cursor = user['items'][0]['last_sync']['cursor']
+    except:
+        cursor = None
 
-  return cursor
+    return cursor
 
 def get_transactions(cursor=None):
-  added = []
-  modified = []
-  removed = [] # Removed transaction ids
-  has_more = True
-  options = TransactionsSyncRequestOptions(
-      include_personal_finance_category = True
-  )
-  # Iterate through each page of new transaction updates for item
-  while has_more:
-      if cursor:
-          request = TransactionsSyncRequest(
-          access_token=ACCESS_TOKEN,
-          cursor= cursor,
-          count=500,
-          options=options,
-          )
-      else:
-          request = TransactionsSyncRequest(
-          access_token=ACCESS_TOKEN,
-          count=500,
-          options=options,
-          )
+    added = []
+    modified = []
+    removed = [] # Removed transaction ids
+    has_more = True
+    options = TransactionsSyncRequestOptions(
+        include_personal_finance_category = True
+    )
+    # Iterate through each page of new transaction updates for item
+    while has_more:
+        if cursor:
+            request = TransactionsSyncRequest(
+            access_token=ACCESS_TOKEN,
+            cursor= cursor,
+            count=500,
+            options=options,
+            )
+        else:
+            request = TransactionsSyncRequest(
+            access_token=ACCESS_TOKEN,
+            count=500,
+            options=options,
+            )
 
-      response = client.transactions_sync(request).to_dict()
-      # Add this page of results
-      added.extend(response['added'])
-      modified.extend(response['modified'])
-      removed.extend(response['removed'])
-      has_more = response['has_more']
-      # Update cursor to the next cursor
-      cursor = response['next_cursor']
+        response = client.transactions_sync(request).to_dict()
+        # Add this page of results
+        added.extend(response['added'])
+        modified.extend(response['modified'])
+        removed.extend(response['removed'])
+        has_more = response['has_more']
+        # Update cursor to the next cursor
+        cursor = response['next_cursor']
 
-  # Print out the transactions
-  results = dict(
-      cursor = cursor,
-      added = added,
-      modified = modified,
-      removed = removed,
-      has_more = has_more,
-      datetime = datetime.datetime.now()
-  )
+    for array in [added, modified]:
+        for transaction in array:
+            transaction['date'] = datetime.datetime.combine(transaction['date'], datetime.datetime.min.time()) if transaction['date'] else None
+            transaction['authorized_date'] = datetime.datetime.combine(transaction['authorized_date'], datetime.datetime.min.time()) if transaction['authorized_date'] else None
 
-  logging.info(f'Found {len(added)} new transactions')
-  for transaction in added:
-      transaction_id = transaction['transaction_id']
-      db.collection('transactions').document(transaction_id).set(transaction)
-  logging.info(f'Added new transactions')
+    # Print out the transactions
+    results = dict(
+        cursor = cursor,
+        added = added,
+        modified = modified,
+        removed = removed,
+        has_more = has_more,
+        datetime = datetime.datetime.now()
+    )
+    
+    # For logging only
+    with open('logs/transactions.json', 'w') as f:
+        f.write(json.dumps(
+        results, 
+        indent=2, 
+        sort_keys=True, 
+        default=str
+        ))
 
-  logging.info(f'Found {len(modified)} modified transactions')
-  for transaction in modified:
-      transaction_id = transaction['transaction_id']
-      db.collection('transactions').document(transaction_id).update(transaction)
-  logging.info(f'Modified transactions')
+    logging.info(f'Found {len(added)} new transactions')
+    for transaction in added:
+        transaction_id = transaction['transaction_id']
+        db.collection('transactions').document(transaction_id).set(transaction)
+    logging.info(f'Added new transactions')
 
-  logging.info(f'Found {len(removed)} removed transactions')
-  for transaction_id in removed:
-      db.collection('transactions').document(transaction_id).update({
-          'removed': results['datetime']
-      })
-  logging.info(f'Removed transactions')
+    logging.info(f'Found {len(modified)} modified transactions')
+    for transaction in modified:
+        transaction_id = transaction['transaction_id']
+        db.collection('transactions').document(transaction_id).update(transaction)
+    logging.info(f'Modified transactions')
 
-  logging.info(f'Updating cursor to {cursor}')
-  db.collection('users').document('flo').update({
-      'items': [
-          {
-              'id': 'j5qaENDdJMIpdP3XLLp1fg4JPyQALMuRnRAD6',
-              'institution': 'Desjardins',
-              'last_sync': {
-                  'datetime': results['datetime'],
-                  'cursor': cursor
-              }
-          }
-      ]
-  })
-  logging.info(f'Updated cursor')
+    logging.info(f'Found {len(removed)} removed transactions')
+    for transaction in removed:
+        transaction_id = transaction['transaction_id']
+        db.collection('transactions').document(transaction_id).update({
+            'removed': results['datetime']
+        })
+    logging.info(f'Removed transactions')
+
+    logging.info(f'Updating cursor to {cursor}')
+    db.collection('users').document('flo').update({
+        'items': [
+            {
+                'id': ITEM_ID,
+                'institution': 'Desjardins',
+                'last_sync': {
+                    'datetime': results['datetime'],
+                    'cursor': cursor
+                }
+            }
+        ]
+    })
+    logging.info(f'Updated cursor')
 
 
-  # For logging only
-  with open('logs/transactions.json', 'w') as f:
-    f.write(json.dumps(
-      results, 
-      indent=2, 
-      sort_keys=True, 
-      default=str
-    ))
 
 if __name__ == '__main__':
-  cursor = get_cursor()
-  get_transactions(cursor=cursor)
+    cursor = get_cursor()
+    get_transactions(cursor=cursor)
