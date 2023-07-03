@@ -12,5 +12,8 @@
     "@nuxt/devtools": "latest",
     "@types/node": "^18",
     "nuxt": "^3.6.1"
+  },
+  "dependencies": {
+    "@clerk/clerk-js": "^4.51.0"
   }
 }
