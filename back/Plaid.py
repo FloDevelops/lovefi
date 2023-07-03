@@ -5,8 +5,6 @@ import datetime
 
 from dotenv import load_dotenv
 
-from firebase_admin import credentials, initialize_app, firestore
-
 from plaid.configuration import Configuration, Environment
 from plaid.api_client import ApiClient
 from plaid.api.plaid_api import PlaidApi
@@ -14,11 +12,6 @@ from plaid.model.transactions_sync_request import TransactionsSyncRequest
 from plaid.model.transactions_sync_request_options import TransactionsSyncRequestOptions
 
 load_dotenv()
-
-# Initialize Firebase
-cred = credentials.Certificate('secrets/sa.json')
-app = initialize_app(cred)
-db = firestore.client()
 
 # Initialize Plaid
 PLAID_ENV = getenv('PLAID_ENV')
@@ -50,23 +43,8 @@ configuration = Configuration(
 api_client = ApiClient(configuration)
 client = PlaidApi(api_client)
 
-# We store the access_token in memory - in production, store it in a secure
-# persistent data store.
-ACCESS_TOKEN = getenv('ACCESS_TOKEN')
-ITEM_ID = getenv('ITEM_ID')
 
-# Function to get the current cursor
-def get_cursor():
-    user = db.collection('users').document('flo').get().to_dict()
-
-    try:
-        cursor = user['items'][0]['last_sync']['cursor']
-    except:
-        cursor = None
-
-    return cursor
-
-def get_transactions(cursor=None):
+def sync_transactions(access_token, cursor=None):
     added = []
     modified = []
     removed = [] # Removed transaction ids
@@ -78,14 +56,14 @@ def get_transactions(cursor=None):
     while has_more:
         if cursor:
             request = TransactionsSyncRequest(
-            access_token=ACCESS_TOKEN,
+            access_token=access_token,
             cursor= cursor,
             count=500,
             options=options,
             )
         else:
             request = TransactionsSyncRequest(
-            access_token=ACCESS_TOKEN,
+            access_token=access_token,
             count=500,
             options=options,
             )
@@ -123,43 +101,9 @@ def get_transactions(cursor=None):
         default=str
         ))
 
-    logging.info(f'Found {len(added)} new transactions')
-    for transaction in added:
-        transaction_id = transaction['transaction_id']
-        db.collection('transactions').document(transaction_id).set(transaction)
-    logging.info(f'Added new transactions')
-
-    logging.info(f'Found {len(modified)} modified transactions')
-    for transaction in modified:
-        transaction_id = transaction['transaction_id']
-        db.collection('transactions').document(transaction_id).update(transaction)
-    logging.info(f'Modified transactions')
-
-    logging.info(f'Found {len(removed)} removed transactions')
-    for transaction in removed:
-        transaction_id = transaction['transaction_id']
-        db.collection('transactions').document(transaction_id).update({
-            'removed': results['datetime']
-        })
-    logging.info(f'Removed transactions')
-
-    logging.info(f'Updating cursor to {cursor}')
-    db.collection('users').document('flo').update({
-        'items': [
-            {
-                'id': ITEM_ID,
-                'institution': 'Desjardins',
-                'last_sync': {
-                    'datetime': results['datetime'],
-                    'cursor': cursor
-                }
-            }
-        ]
-    })
-    logging.info(f'Updated cursor')
-
-
-
-if __name__ == '__main__':
-    cursor = get_cursor()
-    get_transactions(cursor=cursor)
+    response = {
+        'operation': 'sync_transactions',
+        'transactions': results,
+        'datetime': datetime.datetime.now()
+    }
+    return response
