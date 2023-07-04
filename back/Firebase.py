@@ -24,16 +24,10 @@ def get_user(user_id):
 def update_cursor(cursor, item_id):
     logging.info(f'Updating cursor to {cursor}')
     db.collection('users').document('flo').update({
-        'items': [
-            {
-                'id': item_id,
-                'institution': 'Desjardins',
-                'last_sync': {
-                    'datetime': datetime.datetime.now(),
-                    'cursor': cursor
-                }
-            }
-        ]
+        f'items.{item_id}.last_sync': {
+            'datetime': datetime.datetime.now(),
+            'cursor': cursor
+        }
     })
     logging.info(f'Updated cursor')
     response = {
