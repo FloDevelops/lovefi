@@ -7,4 +7,14 @@ export default defineNuxtConfig({
     },
     clerkSecretKey: process.env.CLERK_SECRET_KEY
   },
+  modules: [
+    '@nuxtjs/supabase',
+  ],
+  css: ['~/assets/css/main.css'],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
 })

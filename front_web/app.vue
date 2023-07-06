@@ -7,13 +7,14 @@ useHead({
   bodyAttrs: {
     class: 'test'
   },
-  script: [ { innerHTML: 'console.log(\'Hello world\')' } ]
-})
+  script: [
+    { innerHTML: 'console.log(\'Hello world\')' }  
+  ]
+});
 </script>
 
-
 <template>
-    <theHeader />
+    <NavBar />
   <div>
     <NuxtPage />
   </div>
