@@ -2,6 +2,9 @@
   definePageMeta({
     middleware: 'auth'
   });
+
+  const user = useSupabaseUser();
+  console.log('user id is', user?.value.id);
 </script>
 
 <template>
