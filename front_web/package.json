@@ -17,6 +17,7 @@
     "tailwindcss": "^3.3.2"
   },
   "dependencies": {
-    "@nuxtjs/supabase": "^0.3.8"
+    "@nuxtjs/supabase": "^0.3.8",
+    "firebase": "^10.0.0"
   }
 }

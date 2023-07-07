@@ -21,7 +21,7 @@
 
   const user = useSupabaseUser();
   if (user.value) {
-    console.log('UserCard component: user is logged in', user.value);
+    console.log('UserCard component: user is logged in', user.value.id);
   }
   const name = computed(
     () => user?.value!.user_metadata.full_name
