@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@nuxtjs/supabase": "^0.3.8",
-    "firebase": "^10.0.0"
+    "firebase": "^10.0.0",
+    "plaid": "^15.0.0"
   }
 }

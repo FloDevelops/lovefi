@@ -17,6 +17,16 @@ def sync():
     for item_id, item in items.items():
         transactions = Plaid.sync_transactions(item['access_token'], item['last_sync']['cursor'])
 
+        console = logging.StreamHandler()
+        console.setLevel(logging.INFO)
+        app.logger.addHandler(console)
+        app.logger.info(f'{len(transactions["transactions"]["added"])} transactions added')
+        app.logger.info(f'{len(transactions["transactions"]["modified"])} transactions modified')
+        app.logger.info(f'{len(transactions["transactions"]["removed"])} transactions removed')
+        # print(f'{len(transactions["transactions"]["added"])} transactions added')
+        # print(f'{len(transactions["transactions"]["modified"])} transactions modified')
+        # print(f'{len(transactions["transactions"]["removed"])} transactions removed')
+
         Firebase.add_transactions(transactions['transactions']['added'])
         Firebase.modify_transactions(transactions['transactions']['modified'])
         Firebase.remove_transactions(transactions['transactions']['removed'])

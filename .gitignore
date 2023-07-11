@@ -20,6 +20,7 @@ secrets
 .DS_Store
 .fleet
 .idea
+__pycache__
 
 # Local env files
 .env

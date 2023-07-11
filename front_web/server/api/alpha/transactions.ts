@@ -1,4 +1,4 @@
-import { queryByCollection } from "../../lib/firestore";
+import { queryXLatest } from "../../lib/firestore";
 
 
 export default defineEventHandler(async (event) => {
@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     // const userId = event.context.user.id;
     // to continue...
 
-    const transactions = await queryByCollection('transactions dev');
+    const transactions = await queryXLatest('transactions', 20);
     return transactions;
 
   } catch (error) {
