@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body>
+        <div id="content">
+            {% block content %}
+                <p>Default content</p>
+            {% endblock %}
+        </div>
+
+    {% block footer %}{% endblock %}
+    
+    </body>
+</html>
+
+
