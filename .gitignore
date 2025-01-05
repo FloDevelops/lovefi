@@ -1,32 +1,28 @@
-# Nuxt dev/build outputs
-.output
-.nuxt
-.nitro
-.cache
-dist
-
-# Node dependencies
+# Dependencies and AdonisJS build
 node_modules
-package-lock.json
-
-# Logs
-logs
-*.log
+build
+tmp
 
 # Secrets
-secrets
+.env
+.env.local
+.env.production.local
+.env.development.local
 
-# Misc
-.DS_Store
+# Frontend assets compiled code
+public/assets
+
+# Build tools specific
+npm-debug.log
+yarn-error.log
+
+# Editors specific
 .fleet
 .idea
+.vscode
 
-# Local env files
-.env
-.env.*
-!.env.example
-venv
+# Platform specific
+.DS_Store
 
-# Old python stuff
-_static
-_templates
+
+_legacy
