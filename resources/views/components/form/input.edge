@@ -9,11 +9,11 @@
     value="{{ old(name) || '' }}"
     {{ $props.merge({ class: [inputClass] }).toAttrs() }}
   />
-  @inputError(name)
-    <div class="bg-red-300 text-red-800 mb-4 font-weight-bold p-2 rounded">
-      <p>
-        {{ $messages.join(', ') }}
-      </p>
-    </div>
-  @end
 </label>
+@inputError(name)
+  <div class="bg-red-300 text-red-800 mb-4 font-weight-bold p-2 rounded">
+    <p>
+      {{ $messages.join(', ') }}
+    </p>
+  </div>
+@end
