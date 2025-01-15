@@ -1,29 +1,24 @@
-@layout({ title: 'Log in' })
+@layout({ title: 'Log in - Lovefi' })
 
   <h1>
     Log in
   </h1>
-  <form method="POST" action="{{ route('auth.login.store') }}">
+  <form method="POST" action="{{ route('auth.login.store') }}" class="flex flex-col gap-4">
     {{ csrfField() }}
-    @error('E_INVALID_CREDENTIALS')
-      {{ $message }}
-    @end
-    <label>
-      <span>Email</span>
-      <input type="email" name="email" value="{{ old('email') || '' }}" />
-      @inputError('email')
-        {{ $messages.join(', ') }}
-      @end
-    </label>
-    <label>
-      <span>Password</span>
-      <input type="password" name="password" value="{{ old('password') || '' }}" />
-      @inputError('password')
-        {{ $messages.join(', ') }}
-      @end
-    </label>
+    @!form.input({ type: 'email', name: 'email', displayLabel: 'Email' })
+    @!form.input({ type: 'password', name: 'password', displayLabel: 'Password' })
 
-    <button type="submit">Log in</button>
+    @button({ type: "submit" })
+      Log in
+    @end
+    
+    @error('E_INVALID_CREDENTIALS')
+      <div class="bg-red-300 text-red-800 mt-4 font-weight-bold p-2 rounded">
+        <p>
+          {{ $message }}
+        </p>
+      </div>
+    @end
   </form>
 
 @end

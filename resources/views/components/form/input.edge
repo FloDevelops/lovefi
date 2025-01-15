@@ -1,0 +1,19 @@
+@let(rootClass = 'group relative w-full rounded-md border border-zinc-400 focus-within:border-zinc-600 focus-within:ring-1 focus-within:ring-zinc-600')
+@let(spanClass = 'absolute left-2 z-0 -translate-y-1/2 px-1 bg-zinc-50 text-zinc-500 pointer-events-none duration-100 top-0 text-xs')
+@let(inputClass = 'z-10 h-full w-full rounded-md px-3.5 py-4 outline-none')
+
+<label {{ $props.merge({ class: [rootClass] }).toAttrs() }}>
+  <span {{ $props.merge({ class: [spanClass] }).toAttrs() }}>{{ displayLabel }}</span>
+  <input
+    placeholder=" "
+    value="{{ old(name) || '' }}"
+    {{ $props.merge({ class: [inputClass] }).toAttrs() }}
+  />
+  @inputError(name)
+    <div class="bg-red-300 text-red-800 mb-4 font-weight-bold p-2 rounded">
+      <p>
+        {{ $messages.join(', ') }}
+      </p>
+    </div>
+  @end
+</label>

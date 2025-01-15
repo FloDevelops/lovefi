@@ -5,12 +5,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>
-      {{ title || '' }} - Lovefi
+      {{ title || 'Lovefi' }}
     </title>
 
+    @if($slots.meta)
+      {{{ await $slots.meta() }}}
+    @endif
+    
     @vite(['resources/js/app.js'])
   </head>
   <body>
-    {{{ await $slots.main() }}}
+    <div class="max-w-3xl mx-auto mt-6">
+      @include('partials/nav')
+
+      {{{ await $slots.main() }}}
+    </div>
   </body>
 </html>

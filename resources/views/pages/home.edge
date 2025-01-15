@@ -1,20 +1,11 @@
-@layout({ title: 'Home' })
+@layout({ title: 'Home - Lovefi' })
 
+  @slot('meta')
+    <meta name="description" content="Financial independence for you and your loved ones" />
+  @endslot
+  
   <h1>
     Home
   </h1>
 
-  @if(auth.user)
-    <p>
-      Welcome back, {{ auth.user.email }}
-    </p>
-    <form method="POST" action="{{ route('auth.logout') }}">
-      {{ csrfField() }}
-      <button type="submit">Logout</button>
-    </form>
-  @else
-    <a href="{{ route('auth.register.show') }}">Register</a>
-    <a href="{{ route('auth.login.show') }}">Login</a>
-  @endif
-    
 @endlayout

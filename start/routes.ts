@@ -25,7 +25,7 @@ router
     router.post('/register', [RegisterController, 'store']).as('register.store')
     router.get('/login', [LoginController, 'show']).as('login.show')
     router.post('/login', [LoginController, 'store']).as('login.store')
-    router.post('/logout', [LogoutController, 'handle']).as('logout')
+    router.post('/logout', [LogoutController, 'handle']).as('logout.handle')
   })
   .prefix('auth')
   .as('auth')

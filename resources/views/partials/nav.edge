@@ -1,0 +1,26 @@
+<nav class="mb-4 flex justify-between items-center">
+  @button({ href: route('home') })
+    Home
+  @end
+  
+  <div>
+    @if(auth.user)
+      <form method="POST" action="{{ route('auth.logout.handle') }}">
+        {{ csrfField() }}
+        @button({ type: 'submit' })
+          Logout
+        @end
+      </form>
+    @else
+      <div class="flex gap-2">
+        @button({ href: route('auth.register.show') })
+          Register
+        @end
+        @button({ href: route('auth.login.show') })
+          Login
+        @end
+      </div>
+    @endif
+  </div>
+
+</nav>

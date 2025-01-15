@@ -12,3 +12,9 @@ body {
   height: 100%;
   width: 100%;
 }
+
+h1 {
+  font-size: 1.875rem /* 30px */;
+  line-height: 2.25rem /* 36px */;
+  margin-bottom: 1rem /* 16px */;
+}
