@@ -1,7 +1,8 @@
 {{-- Google like input field based upon https://dev.to/gabrielmlinassi/how-to-create-googles-input-field-with-tailwind-3io5 --}}
 
 @let(rootClass = 'group relative h-14 w-full rounded-md border border-zinc-400 focus-within:border-zinc-600 focus-within:ring-1 focus-within:ring-zinc-600')
-@let(spanClass = 'absolute left-2 top-1/2 z-0 -translate-y-1/2 bg-zinc-50 px-1 text-zinc-500 pointer-events-none duration-100 group-focus-within:top-0 group-focus-within:text-xs')
+@let(baseSpanClass = 'absolute left-2 z-0 -translate-y-1/2 bg-zinc-50 px-1 text-zinc-500 pointer-events-none duration-100 group-focus-within:top-0 group-focus-within:text-xs')
+@let(spanClass = old(name) ? `${baseSpanClass} top-0 text-xs` : `${baseSpanClass} top-1/2`)
 @let(inputClass = 'z-10 h-full w-full rounded-md px-3.5 py-4 outline-none')
 
 <label {{ $props.merge({ class: [rootClass] }).toAttrs() }}>
