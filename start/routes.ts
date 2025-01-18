@@ -10,6 +10,7 @@
 const LoginController = () => import('#controllers/auth/login_controller')
 const RegisterController = () => import('#controllers/auth/register_controller')
 const LogoutController = () => import('#controllers/auth/logout_controller')
+const OrganizationsController = () => import('#controllers/organizations_controller')
 import router from '@adonisjs/core/services/router'
 
 router
@@ -29,3 +30,16 @@ router
   })
   .prefix('auth')
   .as('auth')
+
+router
+  .group(() => {
+    router.get('/', [OrganizationsController, 'index']).as('index')
+    router.get('/create', [OrganizationsController, 'create']).as('create')
+    router.post('/', [OrganizationsController, 'store']).as('store')
+    router.get('/:organizationId', [OrganizationsController, 'show']).as('show')
+    router.get('/:organizationId/edit', [OrganizationsController, 'edit']).as('edit')
+    router.put('/:organizationId', [OrganizationsController, 'update']).as('update')
+    router.delete('/:organizationId', [OrganizationsController, 'destroy']).as('destroy')
+  })
+  .prefix('organizations')
+  .as('organizations')

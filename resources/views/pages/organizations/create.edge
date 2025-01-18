@@ -1,0 +1,16 @@
+@layout({ title: 'Organizations - Lovefi' })
+
+  <h1>
+    Create Organization
+  </h1>
+  <form method="POST" action="{{ route('organizations.store') }}" class="flex flex-col gap-4">
+    {{ csrfField() }}
+    @!form.input({ type: 'text', name: 'name', displayLabel: 'Name' })
+
+    @button({ type: "submit" })
+      Save
+    @end
+    
+  </form>
+
+@end

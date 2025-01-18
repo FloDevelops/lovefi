@@ -1,0 +1,18 @@
+@layout({ title: 'Organizations - Lovefi' })
+
+  <h1>
+    Organizations
+  </h1>
+  <ul>
+    @each(organization in organizations)
+      <li>
+        <a href="{{ route('organizations.show', { organizationId: organization.id }) }}" class="underline">
+          {{ organization.name }}
+        </li>
+      @endeach
+    </ul>
+    @button({ href: route('organizations.create') })
+      Create
+    @end
+    
+  @end

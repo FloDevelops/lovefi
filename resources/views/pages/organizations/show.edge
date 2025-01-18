@@ -1,0 +1,30 @@
+@layout({ title: 'Organizations - Lovefi' })
+
+  <h1>
+    Organization
+  </h1>
+  <div class="flex flex-col gap-4">
+    <div>
+      <span class="font-bold">Name:</span>
+      <span>{{ organization.name }}</span>
+    </div>
+    <div>
+      <span class="font-bold">Created At:</span>
+      <span>{{ organization.createdAt }}</span>
+    </div>
+    <div>
+      <span class="font-bold">Updated At:</span>
+      <span>{{ organization.updatedAt }}</span>
+    </div>
+  </div>
+  <form
+    method="POST"
+    action="{{ route('organizations.destroy', { organizationId: organization.id }, { qs: { _method: 'DELETE' }}) }}"
+  >
+    {{ csrfField() }}
+    @button({ type: 'submit', class: 'bg-red-800 hover:bg-red-700 text-white' })
+      Delete
+    @end
+  </form>
+
+@endlayout

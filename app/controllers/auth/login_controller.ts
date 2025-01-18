@@ -11,6 +11,6 @@ export default class LoginController {
     const { email, password } = await request.validateUsing(loginValidator)
     const user = await User.verifyCredentials(email, password)
     await auth.use('web').login(user)
-    return response.redirect().toRoute('home')
+    return response.redirect().toRoute('organizations.index')
   }
 }
