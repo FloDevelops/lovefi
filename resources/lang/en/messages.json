@@ -1,8 +1,22 @@
 {
-  "title": "Home",
+  "home": {
+    "title": "Reach your financial goals"
+  },
   "register": "Register",
   "login": "Login",
   "logout": "Logout",
+  "firstName": "First name",
   "email": "Email",
-  "password": "Password"
+  "password": "Password",
+  "organizations": "Organizations",
+  "organization": "Organization",
+  "createOrganization": "Create organization",
+  "editOrganization": "Edit organization",
+  "create": "Create",
+  "save": "Save",
+  "edit": "Edit",
+  "delete": "Delete",
+  "name": "Name",
+  "createdAt": "Created at",
+  "updatedAt": "Updated at"
 }

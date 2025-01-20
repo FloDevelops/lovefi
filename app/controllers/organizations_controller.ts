@@ -7,8 +7,9 @@ export default class OrganizationsController {
    * Return list of all posts or paginate through
    * them
    */
-  async index({ view }: HttpContext) {
+  async index({ view, response }: HttpContext) {
     const organizations = await Organization.all()
+    if (organizations.length === 0) return response.redirect().toRoute('organizations.create')
     return view.render('pages/organizations/index', { organizations })
   }
 

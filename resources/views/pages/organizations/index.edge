@@ -1,9 +1,9 @@
 @layout({ title: 'Organizations - Lovefi' })
 
   <h1>
-    Organizations
+    {{ t('messages.organizations') }}
   </h1>
-  <ul>
+  <ul class="mb-4">
     @each(organization in organizations)
       <li>
         <a href="{{ route('organizations.show', { organizationId: organization.id }) }}" class="underline">
@@ -12,7 +12,7 @@
       @endeach
     </ul>
     @button({ href: route('organizations.create') })
-      Create
+      {{ t('messages.create') }}
     @end
     
   @end

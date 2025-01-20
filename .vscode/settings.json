@@ -1,0 +1,12 @@
+{
+  "i18n-ally.localesPaths": ["resources/lang"],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.namespace": true,
+  "i18n-ally.editor.preferEditor": true,
+  "i18n-ally.refactor.templates": [
+    {
+      "templates": ["{{ t('{key}'{args}) }}"],
+      "include": ["**/*.edge"]
+    }
+  ]
+}

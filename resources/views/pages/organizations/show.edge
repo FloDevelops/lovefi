@@ -1,19 +1,19 @@
 @layout({ title: 'Organizations - Lovefi' })
 
   <h1>
-    Organization
+    {{ t('messages.organization') }}
   </h1>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-2 mb-4">
     <div>
-      <span class="font-bold">Name:</span>
+      <span class="font-bold">{{ t('messages.name') }}:</span>
       <span>{{ organization.name }}</span>
     </div>
     <div>
-      <span class="font-bold">Created At:</span>
+      <span class="font-bold">{{ t('messages.createdAt') }}:</span>
       <span>{{ organization.createdAt }}</span>
     </div>
     <div>
-      <span class="font-bold">Updated At:</span>
+      <span class="font-bold">{{ t('messages.updatedAt') }}:</span>
       <span>{{ organization.updatedAt }}</span>
     </div>
   </div>
@@ -23,7 +23,7 @@
   >
     {{ csrfField() }}
     @button({ type: 'submit', class: 'bg-red-800 hover:bg-red-700 text-white' })
-      Delete
+      {{ t('messages.delete') }}
     @end
   </form>
 

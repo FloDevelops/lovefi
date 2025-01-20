@@ -1,8 +1,22 @@
 {
-  "title": "Accueil",
+  "home": {
+    "title": "Atteins tes objectifs financiers"
+  },
   "register": "Inscription",
   "login": "Connexion",
   "logout": "Déconnexion",
+  "firstName": "Prénom",
   "email": "Courriel",
-  "password": "Mot de passe"
+  "password": "Mot de passe",
+  "organizations": "Organisations",
+  "organization": "Organisation",
+  "createOrganization": "Créer une organisation",
+  "editOrganization": "Éditer une organisation",
+  "create": "Créer",
+  "save": "Sauvegarder",
+  "edit": "Éditer",
+  "delete": "Supprimer",
+  "name": "Nom",
+  "createdAt": "Crée à",
+  "updatedAt": "Mis à jour à"
 }

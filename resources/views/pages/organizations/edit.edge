@@ -1,14 +1,14 @@
 @layout({ title: 'Organizations - Lovefi' })
 
   <h1>
-    Edit Organization
+    {{ t('messages.editOrganization') }}
   </h1>
   <form method="PUT" action="{{ route('organizations.update') }}" class="flex flex-col gap-4">
     {{ csrfField() }}
     @!form.input({ type: 'text', name: 'name', displayLabel: 'Name' })
 
     @button({ type: "submit" })
-      Save
+      {{ t('messages.save') }}
     @end
     
   </form>

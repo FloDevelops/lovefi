@@ -1,0 +1,5 @@
+languageIds:
+  - edge
+usageMatchRegex:
+  - "[^\\w\\d]t\\(['\"`]({key})['\"`]"
+sortKeys: true

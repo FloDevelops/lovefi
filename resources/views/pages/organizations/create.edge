@@ -1,14 +1,14 @@
 @layout({ title: 'Organizations - Lovefi' })
 
   <h1>
-    Create Organization
+    {{ t('messages.createOrganization') }}
   </h1>
   <form method="POST" action="{{ route('organizations.store') }}" class="flex flex-col gap-4">
     {{ csrfField() }}
-    @!form.input({ type: 'text', name: 'name', displayLabel: 'Name' })
+    @!form.input({ type: 'text', name: 'name', displayLabel: t('messages.name') })
 
     @button({ type: "submit" })
-      Save
+      {{ t('messages.save') }}
     @end
     
   </form>
