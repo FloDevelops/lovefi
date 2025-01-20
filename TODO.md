@@ -6,6 +6,7 @@
 - [ ] Change locale without redirecting to the home page
 - [ ] Add a breadcrumb
 - [ ] Add the organization member operations
+- [ ] Implement ABAC (Attribute-Based Access Control) on organization members
 - [ ] Add the account operations
 - [ ] Add a user avatar
 - [ ] Add a user settings page
