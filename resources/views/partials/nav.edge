@@ -3,7 +3,17 @@
     Lovefi
   @end
   
-  <div>
+  <div class="flex gap-2">
+    @if(i18n.locale === 'en')
+      @button({ href: route('home.locale', { locale: 'fr' }) })
+        FR
+      @end
+    @else
+      @button({ href: route('home.locale', { locale: 'en' }) })
+        EN
+      @end
+    @endif
+        
     @if(auth.user)
       <form method="POST" action="{{ route('auth.logout.handle') }}">
         {{ csrfField() }}
@@ -12,24 +22,12 @@
         @end
       </form>
     @else
-      <div class="flex gap-2">
-        @if(i18n.locale === 'en')
-          @button({ href: route('home.locale', { locale: 'fr' }) })
-            FR
-          @end
-        @else
-          @button({ href: route('home.locale', { locale: 'en' }) })
-            EN
-          @end
-        @endif
-        
-        @button({ href: route('auth.register.show') })
-          {{ t('messages.register') }}
-        @end
-        @button({ href: route('auth.login.show') })
-          {{ t('messages.login') }}
-        @end
-      </div>
+      @button({ href: route('auth.register.show') })
+        {{ t('messages.register') }}
+      @end
+      @button({ href: route('auth.login.show') })
+        {{ t('messages.login') }}
+      @end
     @endif
   </div>
 
