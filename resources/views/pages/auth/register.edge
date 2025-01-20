@@ -1,14 +1,14 @@
 @layout({ title: 'Register - Lovefi' })
 
   <h1>
-    Register
+    {{ t('messages.register') }}
   </h1>
   <form method="POST" action="{{ route('auth.register.store') }}" class="flex flex-col gap-4">
     {{ csrfField() }}
-    @!form.input({ type: 'email', name: 'email', displayLabel: 'Email' })
-    @!form.input({ type: 'password', name: 'password', displayLabel: 'Password' })
+    @!form.input({ type: 'email', name: 'email', displayLabel: t('messages.email') })
+    @!form.input({ type: 'password', name: 'password', displayLabel: t('messages.password') })
     @button({ type: 'submit' })
-      Register
+      {{ t('messages.register') }}
     @end
   </form>
 

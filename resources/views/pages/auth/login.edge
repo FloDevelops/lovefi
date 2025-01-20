@@ -1,15 +1,15 @@
 @layout({ title: 'Log in - Lovefi' })
 
   <h1>
-    Log in
+    {{ t('messages.login') }}
   </h1>
   <form method="POST" action="{{ route('auth.login.store') }}" class="flex flex-col gap-4">
     {{ csrfField() }}
-    @!form.input({ type: 'email', name: 'email', displayLabel: 'Email' })
-    @!form.input({ type: 'password', name: 'password', displayLabel: 'Password' })
+    @!form.input({ type: 'email', name: 'email', displayLabel: t('messages.email') })
+    @!form.input({ type: 'password', name: 'password', displayLabel: t('messages.password') })
 
     @button({ type: "submit" })
-      Log in
+      {{ t('messages.login') }}
     @end
     
     @error('E_INVALID_CREDENTIALS')

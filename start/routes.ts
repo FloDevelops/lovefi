@@ -14,11 +14,18 @@ const OrganizationsController = () => import('#controllers/organizations_control
 import router from '@adonisjs/core/services/router'
 
 router
-  .get('/', async ({ auth, view }) => {
+  .get('/', async ({ i18n, response }) => {
+    return response.redirect().toRoute('home.locale', { locale: i18n.locale })
+  })
+  .as('home')
+
+router
+  .get('/:locale', async ({ auth, view }) => {
     await auth.check()
     return view.render('pages/home')
   })
-  .as('home')
+  .where('locale', /en|fr/)
+  .as('home.locale')
 
 router
   .group(() => {

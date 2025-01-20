@@ -1,6 +1,6 @@
 <nav class="mb-4 flex justify-between items-center">
-  @button({ href: route('home') })
-    Home
+  @button({ href: route('home.locale', { locale: i18n.locale }) })
+    Lovefi
   @end
   
   <div>
@@ -8,16 +8,26 @@
       <form method="POST" action="{{ route('auth.logout.handle') }}">
         {{ csrfField() }}
         @button({ type: 'submit' })
-          Logout
+          {{ t('messages.logout') }}
         @end
       </form>
     @else
       <div class="flex gap-2">
+        @if(i18n.locale === 'en')
+          @button({ href: route('home.locale', { locale: 'fr' }) })
+            FR
+          @end
+        @else
+          @button({ href: route('home.locale', { locale: 'en' }) })
+            EN
+          @end
+        @endif
+        
         @button({ href: route('auth.register.show') })
-          Register
+          {{ t('messages.register') }}
         @end
         @button({ href: route('auth.login.show') })
-          Login
+          {{ t('messages.login') }}
         @end
       </div>
     @endif
